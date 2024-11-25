@@ -1,0 +1,117 @@
+<div class="flex justify-content-center p-4 bg-light">
+  <div class="w-8 flex gap-5 flex-column shadow-lg p-4 rounded-md bg-white">
+    <p-menubar [model]="items" class="mb-3 border-rounded bg-gradient-to-r from-teal-400 to-blue-400 text-white"></p-menubar>
+
+    <p-table 
+      [value]="parqueaderos" 
+      styleClass="p-datatable-sm" 
+      selectionMode="single" 
+      [(selection)]="selectedParqueadero" 
+      (onRowSelect)="editParqueadero(selectedParqueadero)"
+      [responsiveLayout]="'scroll'"
+      class="shadow-sm rounded-md border-primary">
+      <ng-template pTemplate="caption">
+        <div class="flex align-items-center justify-content-between p-2 bg-teal-500 border-rounded text-white">
+          <h3 class="font-bold">Parqueaderos Registrados</h3>
+          <p-button 
+            icon="pi pi-plus" 
+            label="Nuevo Parqueadero" 
+            class="p-button-rounded p-button-success bg-green-500 border-green-500 text-white"
+            (click)="verFormParqueadero = true">
+          </p-button>
+        </div>
+      </ng-template>
+      <ng-template pTemplate="header">
+        <tr>
+          <th class="text-teal-600">Nombre</th>
+          <th class="text-teal-600">NIT</th>
+          <th class="text-teal-600">Dirección</th>
+          <th class="text-teal-600">Teléfono</th>
+          <th class="text-teal-600 text-center">Acciones</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-parqueadero>
+        <tr>
+          <td>{{ parqueadero.nombre }}</td>
+          <td>{{ parqueadero.nit }}</td>
+          <td>{{ parqueadero.direccion }}</td>
+          <td>{{ parqueadero.telefono }}</td>
+          <td class="text-center">
+            <p-button 
+              icon="pi pi-pencil" 
+              class="p-button-rounded bg-blue-500 border-blue-500 text-white mx-1" 
+              (click)="editParqueadero(parqueadero)"
+              tooltip="Editar">
+            </p-button>
+            <p-button 
+              icon="pi pi-trash" 
+              class="p-button-rounded bg-red-500 border-red-500 text-white mx-1" 
+              (click)="deleteParqueadero(parqueadero)"
+              tooltip="Eliminar">
+            </p-button>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+</div>
+
+<p-dialog 
+  header="{{ selectedParqueadero.id ? 'Editar Parqueadero' : 'Nuevo Parqueadero' }}" 
+  [modal]="true" 
+  [(visible)]="verFormParqueadero" 
+  [style]="{ width: '30rem' }" 
+  class="shadow-lg border-rounded bg-light">
+  <form [formGroup]="formParqueadero" class="flex flex-column gap-4 p-3">
+    <div class="flex flex-column gap-2">
+      <label for="nombre" class="font-medium text-teal-700">Nombre</label>
+      <input
+        formControlName="nombre"
+        pInputText
+        id="nombre"
+        class="p-inputtext-sm border-rounded"
+        placeholder="Ingrese el nombre del parqueadero">
+    </div>
+    <div class="flex flex-column gap-2">
+      <label for="nit" class="font-medium text-teal-700">NIT</label>
+      <input
+        formControlName="nit"
+        pInputText
+        id="nit"
+        class="p-inputtext-sm border-rounded"
+        placeholder="Ingrese el NIT del parqueadero">
+    </div>
+    <div class="flex flex-column gap-2">
+      <label for="direccion" class="font-medium text-teal-700">Dirección</label>
+      <input
+        formControlName="direccion"
+        pInputText
+        id="direccion"
+        class="p-inputtext-sm border-rounded"
+        placeholder="Ingrese la dirección">
+    </div>
+    <div class="flex flex-column gap-2">
+      <label for="telefono" class="font-medium text-teal-700">Teléfono</label>
+      <input
+        formControlName="telefono"
+        pInputText
+        id="telefono"
+        class="p-inputtext-sm border-rounded"
+        placeholder="Ingrese el teléfono">
+    </div>
+  </form>
+
+  <div class="flex justify-content-end gap-3 mt-3">
+    <p-button 
+      label="Cancelar" 
+      class="p-button-rounded bg-gray-400 border-gray-400 text-white" 
+      (click)="cancel()">
+    </p-button>
+    <p-button 
+      label="Guardar" 
+      class="p-button-rounded bg-green-500 border-green-500 text-white" 
+      [disabled]="!formParqueadero.valid" 
+      (click)="accionFormularioParqueadero()">
+    </p-button>
+  </div>
+</p-dialog>
